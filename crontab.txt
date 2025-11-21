@@ -1,1 +1,1 @@
-*/10 * * * * /bin/bash /home/user/CW/scraper/goldScraper.sh >> /home/user/CW//scraper.log
+*/10 * * * * /bin/bash /home/user/gold-tracker/scraper/goldScraper.sh >> /home/user/gold-tracker/logs/scraper.log 2>&1
