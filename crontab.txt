@@ -1,0 +1,1 @@
+*/10 * * * * /bin/bash /home/user/CW/scraper/goldScraper.sh >> /home/user/CW//scraper.log
