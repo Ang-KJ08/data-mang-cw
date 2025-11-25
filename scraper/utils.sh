@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mysql_exec(){
+mysql_exec() {
     CMD=$1
-    /opt/lampp/bin/mysql -u root -e "$CMD"
+    /usr/local/mysql/bin/mysql -u root -p -e "USE gold_tracker; $CMD"
 }
