@@ -1,1 +1,1 @@
-0 */6 * * * /bin/bash /full/path/to/CW/scraper/goldScraper.sh >> /full/path/to/CW/scraper.log 2>&1
+0 */6 * * * /bin/bash /full/path/to/CW/scraper/goldsilverScraper.sh >> /full/path/to/CW/scraper.log 2>&1

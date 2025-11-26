@@ -1,10 +1,14 @@
 #!/bin/bash
 
+MYSQL_CMD="${MYSQL_CMD:-mysql}"
+MYSQL_FLAGS="${MYSQL_FLAGS:--u root -p}"
+DB_NAME="${DB_NAME:-gold_tracker}"
+
 mysql_exec(){
-local CMD="$1"
-/usr/local/mysql/bin/mysql -u root -p -e "USE gold_tracker; $CMD"
+    local sql="$1"
+    $MYSQL_CMD $MYSQL_FLAGS -B -e "USE ${DB_NAME}; ${sql};"
 }
 
-echo_info() { echo "[INFO] $1"; }
-echo_success() { echo "[SUCCESS] $1"; }
-echo_error() { echo "[ERROR] $1"; }
+echo_info(){ echo -e "[INFO] $1"; }
+echo_success(){ echo -e "[SUCCESS] $1"; }
+echo_error(){ echo -e "[ERROR] $1"; }

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 MYSQL_CMD="${MYSQL_CMD:-mysql}"
-MYSQL_FLAGS="${MYSQL_FLAGS:--u root}"
-DB_NAME="${DB_NAME:-goldtracker}"
+MYSQL_FLAGS="${MYSQL_FLAGS="-u root -p"}"
+DB_NAME="${DB_NAME:-gold_tracker}"
 
 OUTDIR="./plots"
 mkdir -p "$OUTDIR"
@@ -13,7 +13,7 @@ mysql_query(){
 }
 
 plot_gold_percent_hist(){
-    mysql_query "SELECT gold_percent FROM gold_data WHERE gold_percent IS NOT NULL;" \
+    mysql_query "SELECT gold_percent FROM gold_prices WHERE gold_percent IS NOT NULL;" \
         > /tmp/goldPctVals_raw.csv
 
     tail -n +2 /tmp/goldPctVals_raw.csv > /tmp/goldPctVals.dat
@@ -33,7 +33,7 @@ GP
 }
 
 plot_gold_vs_silver(){
-    mysql_query "SELECT created_at, gold_price, silver_price FROM gold_data ORDER BY created_at;" \
+    mysql_query "SELECT created_at, gold_price, silver_price FROM gold_prices ORDER BY created_at;" \
         > /tmp/gold_vs_silver_raw.csv
 
     tail -n +2 /tmp/gold_vs_silver_raw.csv | awk -F '\t' '{print $2 "\t" $3}' \
@@ -53,7 +53,7 @@ GP
 }
 
 plot_gold_vs_time(){
-    mysql_query "SELECT created_at, gold_price FROM gold_data ORDER BY created_at;" \
+    mysql_query "SELECT created_at, gold_price FROM gold_prices ORDER BY created_at;" \
         > /tmp/gold_vs_time_raw.csv
 
     tail -n +2 /tmp/gold_vs_time_raw.csv > /tmp/gold_vs_time.dat
@@ -76,7 +76,7 @@ GP
 
 plot_gold_percent_vs_time(){
 
-    mysql_query "SELECT created_at, gold_percent FROM gold_data ORDER BY created_at;" \
+    mysql_query "SELECT created_at, gold_percent FROM gold_prices ORDER BY created_at;" \
         > /tmp/goldPct_vs_time_raw.csv
 
     tail -n +2 /tmp/goldPct_vs_time_raw.csv > /tmp/goldPct_vs_time.dat
@@ -99,7 +99,7 @@ GP
 
 plot_gold_boxplot(){
 
-    mysql_query "SELECT gold_price FROM gold_data WHERE gold_price IS NOT NULL;" \
+    mysql_query "SELECT gold_price FROM gold_prices WHERE gold_price IS NOT NULL;" \
         > /tmp/goldPriceVals_raw.csv
 
     tail -n +2 /tmp/goldPriceVals_raw.csv > /tmp/goldPriceVals.dat
@@ -119,7 +119,7 @@ GP
 
 plot_gold_rolling_avg(){
 
-    mysql_query "SELECT created_at, gold_price FROM gold_data ORDER BY created_at;" \
+    mysql_query "SELECT created_at, gold_price FROM gold_prices ORDER BY created_at;" \
         > /tmp/goldPrices_raw.csv
 
     tail -n +2 /tmp/goldPrices_raw.csv > /tmp/goldPricesTime.dat
@@ -154,7 +154,7 @@ GP
 
 plot_gold_spread(){
 
-    mysql_query "SELECT created_at, gold_price, silver_price FROM gold_data ORDER BY created_at;" \
+    mysql_query "SELECT created_at, gold_price, silver_price FROM gold_prices ORDER BY created_at;" \
         > /tmp/goldSpread_raw.csv
 
     tail -n +2 /tmp/goldSpread_raw.csv | \
@@ -180,10 +180,7 @@ GP
 plot_monthly_avg(){
 
     mysql_query "
-        SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym,
-               ROUND(AVG(gold_price),4)
-        FROM gold_data
-        GROUP BY ym ORDER BY ym;" > /tmp/monthlyTrend_raw.csv
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS ym, ROUND(AVG(gold_price),4) FROM gold_prices GROUP BY ym ORDER BY ym;" > /tmp/monthlyTrend_raw.csv
 
     tail -n +2 /tmp/monthlyTrend_raw.csv > /tmp/monthlyTrend.dat
 
@@ -204,10 +201,7 @@ GP
 plot_weekly_avg(){
 
     mysql_query "
-        SELECT CONCAT(YEAR(created_at), '-', LPAD(WEEK(created_at,1),2,'0')) AS yw,
-               ROUND(AVG(gold_price),4)
-        FROM gold_data
-        GROUP BY yw ORDER BY yw;" > /tmp/weeklyAvg_raw.csv
+        SELECT CONCAT(YEAR(created_at), '-', LPAD(WEEK(created_at,1),2,'0')) AS yw, ROUND(AVG(gold_price),4) FROM gold_prices GROUP BY yw ORDER BY yw;" > /tmp/weeklyAvg_raw.csv
 
     tail -n +2 /tmp/weeklyAvg_raw.csv > /tmp/weeklyAvg.dat
 
