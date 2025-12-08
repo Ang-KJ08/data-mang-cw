@@ -320,6 +320,13 @@ main(){
     log_message "=== All 10 plots generated successfully! ==="
     log_message "Plots saved in: $PLOTS_DIR/"
     log_message "Data files saved in: $DATA_DIR/"
+
+    log_message "=== All 10 plots generated successfully! ==="
+    log_message "Plots saved in: $PLOTS_DIR/"
+    
+    if [ -f fit.log ]; then
+        rm fit.log
+    fi
 }
 
 main
